@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import {Login} from "@/screens/Login";
+import {Login} from "@/screens/login/Login";
 import {PaperProvider} from "react-native-paper";
 
 export default function App() {
