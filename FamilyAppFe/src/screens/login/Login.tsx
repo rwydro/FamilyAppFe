@@ -1,23 +1,33 @@
-import {Text, TextStyle, View, Image} from "react-native";
+import {Image, Text, View} from "react-native";
 import {Button, Divider, Headline, Subheading, TextInput} from "react-native-paper";
 import React, {useState} from "react";
 import {
-    contentContainer, devider, googleButton, googleIcon,
+    contentContainer,
+    devider,
+    googleButton,
+    googleIcon,
     headline,
     headlineContainer,
-    inputContainer, loginButton,
+    inputContainer,
+    loginButton,
     loginPageLayout,
-    subHeadline, textInput
+    subHeadline,
+    textInput
 } from "@/screens/login/styles";
-import {black, textGreyColor, lightGrey, white} from "@/design/colors";
+import {black, lightGrey, textGreyColor, white} from "@/design/colors";
+
+import {LoginScreenProps} from "../../../App";
 const GoogleIcon = require("../../assets/icons/google.png");
 
+interface LoginProps {
+    navigation: LoginScreenProps['navigation'];
+}
 
-export const Login = () => {
+export const Login:React.FC<LoginProps> = ({navigation})  => {
     const [email, setEmail] = useState("")
     const [error, setError] = useState(false);
 
-    const validateEmail = (value: string):boolean => {
+    const validateEmail = (value: string): boolean => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(value);
     };
@@ -30,7 +40,7 @@ export const Login = () => {
     return (
         <View style={loginPageLayout}>
             <View style={headlineContainer}>
-                <Headline style={headline} >Family App</Headline>
+                <Headline style={headline}>Family App</Headline>
             </View>
             <View style={contentContainer}>
                 <Subheading style={subHeadline}> Create account </Subheading>
@@ -50,9 +60,10 @@ export const Login = () => {
                     ></TextInput>
                 </View>
                 <Button
-                    theme={{ colors: {primary: black, surfaceDisabled: lightGrey }}}
+                    theme={{colors: {primary: black, surfaceDisabled: lightGrey}}}
                     mode={"contained"}
                     style={loginButton}
+                    onPress={() => navigation.navigate('Main')}
                 >Login</Button>
                 <Divider horizontalInset={true} style={devider}/>
                 <Button
@@ -64,9 +75,9 @@ export const Login = () => {
                             />
                     }
                     textColor={black}
-                        buttonColor={white}
-                        mode="contained"
-                        style={googleButton}>Continue with Google</Button>
+                    buttonColor={white}
+                    mode="contained"
+                    style={googleButton}>Continue with Google</Button>
             </View>
         </View>
     )

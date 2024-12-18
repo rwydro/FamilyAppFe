@@ -12,7 +12,8 @@
     "paths": {
       "@/*": [
         "src/*"
-      ]
+      ],
+      "@assets/*": ["src/assets/*"]
     },
     "sourceMap": true
   },
