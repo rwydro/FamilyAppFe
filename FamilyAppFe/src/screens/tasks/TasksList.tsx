@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {View, StyleSheet, TouchableOpacity, Text} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, Text, TouchableWithoutFeedback, Animated } from 'react-native';
 import {Agenda, Calendar, DateData} from 'react-native-calendars';
 import {CalendarList} from "react-native-calendars/src";
 import dayjs from "dayjs";
@@ -42,11 +42,38 @@ export const TasksList: React.FC = () => {
         ];
         setItems(newItems);
     };
+    const [collapsed, setCollapsed] = useState(true);
+    const [animation] = useState(new Animated.Value(0));
+    const toggleCollapse = () => {
+        if (collapsed) {
+            Animated.timing(animation, {
+                toValue: 1,
+                duration: 300,
+                useNativeDriver: true
+            }).start();
+        } else {
+            Animated.timing(animation, {
+                toValue: 0,
+                duration: 300,
+                useNativeDriver: true
+            }).start();
+        }
+        setCollapsed(!collapsed);
+    };
 
     const renderItem = (item: { name: string; height: number }, firstItemInDay) => {
         return (
             <TouchableOpacity style={[styles.item, { height: item.height }]}>
-                <Text>{item.name}</Text>
+                <TouchableWithoutFeedback onPress={toggleCollapse}>
+                    <View>
+                        <Text>{item.name}</Text>
+                    </View>
+                </TouchableWithoutFeedback>
+                <Animated.View>
+                    <Text>
+                        asdsadasd
+                    </Text>
+                </Animated.View>
             </TouchableOpacity>
         );
     };
@@ -76,6 +103,8 @@ export const TasksList: React.FC = () => {
                         <Text style={styles.selectedDayText}>{day?.day}</Text>
                     </View>
                 )}
+                pastScrollRange={12} // Liczba miesięcy do przewijania wstecz
+                futureScrollRange={12} // Liczba miesięcy do przewijania w
                 theme={{
                     agendaDayTextColor: 'blue',
                     agendaDayNumColor: 'green',
