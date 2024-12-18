@@ -1,5 +1,5 @@
 import {Image, Text, View} from "react-native";
-import {Button, Divider, Headline, Subheading, TextInput} from "react-native-paper";
+import {Button, Divider, Headline, Subheading, TextInput, PaperProvider} from "react-native-paper";
 import React, {useState} from "react";
 import {
     contentContainer,
@@ -39,6 +39,7 @@ export const Login:React.FC<LoginProps> = ({navigation})  => {
 
     return (
         <View style={loginPageLayout}>
+            <PaperProvider> 
             <View style={headlineContainer}>
                 <Headline style={headline}>Family App</Headline>
             </View>
@@ -79,6 +80,7 @@ export const Login:React.FC<LoginProps> = ({navigation})  => {
                     mode="contained"
                     style={googleButton}>Continue with Google</Button>
             </View>
+            </PaperProvider>
         </View>
     )
 }

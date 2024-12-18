@@ -20,7 +20,7 @@ export type LoginScreenProps = NativeStackScreenProps<RootStackParamList, "Login
 export default function App() {
   return (
       <NavigationContainer>
-          <PaperProvider>
+    
           <Stack.Navigator screenOptions={{
               headerShown: false,
           }}>
@@ -29,7 +29,7 @@ export default function App() {
 
           </Stack.Navigator>
 
-          </PaperProvider>
+     
       </NavigationContainer>
 
   );

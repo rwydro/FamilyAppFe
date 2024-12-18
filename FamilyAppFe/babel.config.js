@@ -11,6 +11,8 @@ module.exports = function (api) {
                     regenerator: true,
                     useESModules: true,
                 },
+            
+                'react-native-reanimated/plugin',    
             ],
         ],
     };

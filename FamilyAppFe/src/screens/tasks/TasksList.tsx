@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {View, StyleSheet, TouchableOpacity, Text, TouchableWithoutFeedback, Animated } from 'react-native';
 import {Agenda, Calendar, DateData} from 'react-native-calendars';
 import {CalendarList} from "react-native-calendars/src";
 import dayjs from "dayjs";
 import {black, textGreyColor, white} from "@/design/colors";
 import ExpandableCalendar from "@/screens/tasks/Calendar";
+import { PaperProvider, List } from 'react-native-paper';
+
 
 
 interface AgendaItem {
@@ -21,7 +23,7 @@ export const TasksList: React.FC = () => {
         '2024-12-10': [{ name: 'Meeting with team', height: 80 }],
     });
 
-    const loadItems = (day: { dateString: string, timestamp: number }) => {
+    const loadItems = useCallback((day: { dateString: string, timestamp: number }) => {
         // Lazy loading example: fill days dynamically
         const newItems: AgendaItemsMap = {};
         const date = new Date(day.timestamp);
@@ -41,42 +43,7 @@ export const TasksList: React.FC = () => {
             },
         ];
         setItems(newItems);
-    };
-    const [collapsed, setCollapsed] = useState(true);
-    const [animation] = useState(new Animated.Value(0));
-    const toggleCollapse = () => {
-        if (collapsed) {
-            Animated.timing(animation, {
-                toValue: 1,
-                duration: 300,
-                useNativeDriver: true
-            }).start();
-        } else {
-            Animated.timing(animation, {
-                toValue: 0,
-                duration: 300,
-                useNativeDriver: true
-            }).start();
-        }
-        setCollapsed(!collapsed);
-    };
-
-    const renderItem = (item: { name: string; height: number }, firstItemInDay) => {
-        return (
-            <TouchableOpacity style={[styles.item, { height: item.height }]}>
-                <TouchableWithoutFeedback onPress={toggleCollapse}>
-                    <View>
-                        <Text>{item.name}</Text>
-                    </View>
-                </TouchableWithoutFeedback>
-                <Animated.View>
-                    <Text>
-                        asdsadasd
-                    </Text>
-                </Animated.View>
-            </TouchableOpacity>
-        );
-    };
+    }, []);
 
     const renderEmptyDate = () => {
         return (
@@ -86,18 +53,38 @@ export const TasksList: React.FC = () => {
         );
     };
 
+    const [expanded, setExpanded] = useState<string[]>([])
+    const setExpandTask = useCallback((name:string, isElementExpanded: boolean) => {
+        isElementExpanded ? setExpanded(expanded.filter(el => el !== name)) : setExpanded([name, ...expanded])
+    },[expanded]);
+
+    const renderItems = useCallback((item: {name: string}, index, wwww) => {
+        const isElementExpanded = !!expanded.find(el => el === item.name)
+            return(
+                <View style={styles.agendaItem}>
+                <List.Accordion
+                    title={item.name}
+                    expanded={isElementExpanded}
+                    onPress={() => setExpandTask(item.name, isElementExpanded)}
+                    style= {{backgroundColor: 'white'}}
+                    titleStyle={{color: 'black'}}
+                >
+                        <List.Item title="qweqwe"/>
+                </List.Accordion>
+            
+            </View>
+            )
+    }, [expanded])
+
 
     return (
         <View style={styles.agendaContainer}>
+            <PaperProvider>
             <Agenda
                 items={items}
                 loadItemsForMonth={loadItems}
                 selected={dayjs().format('YYYY-MM-DD')}
-                renderItem={(item) => (
-                    <View style={styles.agendaItem}>
-                        <Text style={styles.agendaItemText}>{item.name}</Text>
-                    </View>
-                )}
+                renderItem={renderItems}
                 renderDay={(day, item) => (
                     <View>
                         <Text style={styles.selectedDayText}>{day?.day}</Text>
@@ -115,6 +102,7 @@ export const TasksList: React.FC = () => {
                     dotColor: '#5E5E5E',
                 }}
             />
+        </PaperProvider>
         </View>
     )
 };

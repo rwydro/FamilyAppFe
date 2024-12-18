@@ -21,5 +21,5 @@ module.exports = {
         },
     },
     presets: ['babel-preset-expo'],
-    watchFolders: [__dirname + '/src'],
+
 };
